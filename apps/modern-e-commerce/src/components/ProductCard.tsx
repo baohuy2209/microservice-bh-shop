@@ -28,7 +28,7 @@ function ProductCard({ product }: { product: ProductType }) {
       <Link href={`/products/${product.id}`}>
         <div className="relative aspect-2/3">
           <Image
-            src={product.images[productTypes.color]}
+            src={product.images[productTypes.color || "default"] || "/logo.png"}
             alt={product.name}
             className="object-cover hover:scale-105 transition-all duration-300 ease-out"
             width={500}

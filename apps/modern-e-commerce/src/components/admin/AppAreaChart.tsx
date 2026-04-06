@@ -33,7 +33,7 @@ const AppAreaChart = () => {
   return (
     <div className="">
       <h1 className="text-lg font-medium mb-6">Total Visitors</h1>
-      <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+      <ChartContainer config={chartConfig} className="min-h-50 w-full">
         <AreaChart accessibilityLayer data={chartData}>
           <CartesianGrid vertical={false} />
           <XAxis
@@ -46,6 +46,7 @@ const AppAreaChart = () => {
           <YAxis tickLine={false} tickMargin={10} axisLine={false} />
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
+
           <defs>
             <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
               <stop

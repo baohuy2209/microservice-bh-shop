@@ -13,11 +13,14 @@ const useCartStore = create<CartStoreStateType & CartStoreActionsType>()(
             (p) =>
               p.id === product.id &&
               p.selectedSize === product.selectedSize &&
-              p.selectedColor === product.selectedColor
+              p.selectedColor === product.selectedColor,
           );
           if (existingIndex !== -1) {
             const updatedCart = [...state.cart];
-            updatedCart[existingIndex].quantity += product.quantity || 1;
+            const item = updatedCart[existingIndex];
+            if (item) {
+              item.quantity += product.quantity || 1;
+            }
             return { cart: updatedCart };
           }
 
@@ -41,7 +44,7 @@ const useCartStore = create<CartStoreStateType & CartStoreActionsType>()(
                 p.id === product.id &&
                 p.selectedSize === product.selectedSize &&
                 p.selectedColor === product.selectedColor
-              )
+              ),
           ),
         })),
       clearCart: () => set({ cart: [] }),
@@ -54,7 +57,7 @@ const useCartStore = create<CartStoreStateType & CartStoreActionsType>()(
           state.hasHydrated = true;
         }
       },
-    }
-  )
+    },
+  ),
 );
 export default useCartStore;

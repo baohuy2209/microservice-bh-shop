@@ -8,7 +8,7 @@ import { CartItemsType, ShippingFormInputs } from "@/types";
 import { ArrowLeft, ArrowRight, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 const steps = [
   {
     id: 1,
@@ -78,7 +78,7 @@ export const cartItems: CartItemsType = [
     selectedColor: "black",
   },
 ];
-const CartPage = () => {
+const CartPageContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [shippingForm, setShippingForm] = useState<ShippingFormInputs>();
@@ -216,6 +216,19 @@ const CartPage = () => {
       </div>
       <Footer />
     </div>
+  );
+};
+const CartPage = () => {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          Loading...
+        </div>
+      }
+    >
+      <CartPageContent />
+    </Suspense>
   );
 };
 
