@@ -45,7 +45,7 @@ export const paymentFormSchema = z.object({
     .string()
     .regex(
       /^(0[1-9]|1[0-2])\/\d{2}$/,
-      "Expiration date must be in MM/YY format!"
+      "Expiration date must be in MM/YY format!",
     ),
   cvv: z.string().min(3, "CVV is required!").max(3, "CVV is required!"),
 });
