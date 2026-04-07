@@ -1,0 +1,21 @@
+{
+  "name": "@repo/types",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo/product-db": "workspace:*"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    }
+  }
+}

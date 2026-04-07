@@ -1,9 +1,10 @@
 import Link from "next/link";
-import React from "react";
 import Image from "next/image";
 import Searchbar from "@/components/Searchbar";
 import { Bell, Home } from "lucide-react";
 import ShoppingCartIcon from "@/components/ShoppingCartIcon";
+import { Show, SignInButton } from "@clerk/nextjs";
+import ProfileButton from "@/components/ProfileButton";
 
 export default function Navbar() {
   return (
@@ -29,7 +30,12 @@ export default function Navbar() {
         </Link>
         <Bell className="w-4 h-4 text-gray-600" />
         <ShoppingCartIcon />
-        <Link href="/login">Sign in</Link>
+        <Show when="signed-out">
+          <SignInButton />
+        </Show>
+        <Show when="signed-in">
+          <ProfileButton />
+        </Show>
       </div>
     </nav>
   );
