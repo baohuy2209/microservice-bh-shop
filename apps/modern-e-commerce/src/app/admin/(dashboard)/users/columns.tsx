@@ -11,23 +11,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import type { User } from "@clerk/nextjs/server";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export type Product = {
-  id: string | number;
-  price: number;
-  name: string;
-  shortDescription: string;
-  description: string;
-  sizes: string[];
-  colors: string[];
-  images: Record<string, string>;
-};
+// export type User = {
+//   id: string;
+//   avatar: string;
+//   fullName: string;
+//   email: string;
+//   status: "active" | "inactive";
+// };
 
-export const columns: ColumnDef<Product>[] = [
+export const columns: ColumnDef<User>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -47,15 +45,15 @@ export const columns: ColumnDef<Product>[] = [
     ),
   },
   {
-    accessorKey: "image",
-    header: "Image",
+    accessorKey: "avatar",
+    header: "Avatar",
     cell: ({ row }) => {
-      const product = row.original;
+      const user = row.original;
       return (
         <div className="w-9 h-9 relative">
           <Image
-            src={product.images[product.colors?.[0] ?? 0] || "/logo.png"}
-            alt={product.name}
+            src={user.imageUrl}
+            alt={user.firstName || user.username || "-"}
             fill
             className="rounded-full object-cover"
           />
@@ -64,35 +62,59 @@ export const columns: ColumnDef<Product>[] = [
     },
   },
   {
-    accessorKey: "name",
-    header: "Name",
+    accessorKey: "firstName",
+    header: "User",
+    cell: ({ row }) => {
+      const user = row.original;
+      return <div className="">{user.firstName || user.username || "-"}</div>;
+    },
   },
   {
-    accessorKey: "price",
+    accessorKey: "email",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Price
+          Email
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const user = row.original;
+      return <div className="">{user.emailAddresses[0]?.emailAddress}</div>;
+    },
   },
   {
-    accessorKey: "shortDescription",
-    header: "Description",
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => {
+      const user = row.original;
+      const status = user.banned ? "banned" : "active";
+
+      return (
+        <div
+          className={cn(
+            `p-1 rounded-md w-max text-xs`,
+            status === "active" && "bg-green-500/40",
+            status === "banned" && "bg-red-500/40",
+          )}
+        >
+          {status as string}
+        </div>
+      );
+    },
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const product = row.original;
+      const user = row.original;
 
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
@@ -101,15 +123,13 @@ export const columns: ColumnDef<Product>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() =>
-                navigator.clipboard.writeText(product.id.toString())
-              }
+              onClick={() => navigator.clipboard.writeText(user.id)}
             >
-              Copy product ID
+              Copy user ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link href={`/products/${product.id}`}>View customer</Link>
+              <Link href={`/admin/users/${user.id}`}>View customer</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
