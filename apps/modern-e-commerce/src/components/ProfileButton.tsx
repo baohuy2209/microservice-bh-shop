@@ -2,7 +2,6 @@
 import { UserButton } from "@clerk/nextjs";
 import { ShoppingBag } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React from "react";
 
 export default function ProfileButton() {
   const router = useRouter();

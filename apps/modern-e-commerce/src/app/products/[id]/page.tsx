@@ -1,10 +1,10 @@
-import { ProductType } from "@/types";
+import { ProductType } from "@repo/types";
 import Image from "next/image";
 import ProductInteraction from "@/components//ProductInteraction";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 const product: ProductType = {
-  id: 1,
+  id: "1",
   name: "Adidas CoreFit T-Shirt",
   shortDescription:
     "Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.",
@@ -18,6 +18,9 @@ const product: ProductType = {
     purple: "/products/1p.png",
     green: "/products/1gr.png",
   },
+  categorySlug: "test",
+  createdAt: new Date(),
+  updatedAt: new Date(),
 };
 export const generateMetadata = async ({
   params,
@@ -46,7 +49,9 @@ const ProductPage = async ({
         {/* IMAGES */}
         <div className="w-full lg:w-5/12 relative aspect-2/3">
           <Image
-            src={product.images?.[selectedColor] || ""}
+            src={
+              (product.images as Record<string, string>)?.[selectedColor] || ""
+            }
             alt={product.name}
             fill
             className="object-contain rounded-md"

@@ -1,5 +1,4 @@
-import { cartItems } from "@/app/cart/page";
-import { CartStoreStateType, CartStoreActionsType } from "@/types";
+import { CartStoreStateType, CartStoreActionsType } from "@repo/types";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 const useCartStore = create<CartStoreStateType & CartStoreActionsType>()(

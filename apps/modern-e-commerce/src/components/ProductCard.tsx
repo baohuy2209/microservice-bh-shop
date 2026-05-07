@@ -1,15 +1,18 @@
 "use client";
-import { ProductType } from "@/types";
+import { ProductType } from "@repo/types";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ShoppingCart } from "lucide-react";
+import useCartStore from "@/stores/cartStore";
+import { toast } from "react-toastify";
 
 function ProductCard({ product }: { product: ProductType }) {
   const [productTypes, setProductTypes] = React.useState({
     size: product.sizes[0],
     color: product.colors[0],
   });
+  const { addToCart } = useCartStore();
   const handleProductType = ({
     type,
     value,
@@ -22,13 +25,26 @@ function ProductCard({ product }: { product: ProductType }) {
       [type]: value,
     }));
   };
+  const handleAddToCart = () => {
+    addToCart({
+      ...product,
+      quantity: 1,
+      selectedSize: productTypes.size!,
+      selectedColor: productTypes.color!,
+    });
+    toast.success("Product added to cart");
+  };
   return (
     <div className="shadow-lg rounded-lg overflow-hidden">
       {/* IMAGE */}
       <Link href={`/products/${product.id}`}>
         <div className="relative aspect-2/3">
           <Image
-            src={product.images[productTypes.color || "default"] || "/logo.png"}
+            src={
+              (product.images as Record<string, string>)?.[
+                productTypes.color || "default"
+              ] || "/logo.png"
+            }
             alt={product.name}
             className="object-cover hover:scale-105 transition-all duration-300 ease-out"
             width={500}
@@ -87,7 +103,10 @@ function ProductCard({ product }: { product: ProductType }) {
         {/* PRICE AND ADD TO CART BUTTON */}
         <div className="flex flex-row justify-between items-center">
           <p className="font-normal text-[16px]">${product.price.toFixed(2)}</p>
-          <button className="flex flex-row items-center shadow-lg gap-2 px-2 py-1 rounded-md ring-1 ring-gray-300 cursor-pointer hover:text-white hover:bg-black hover:scale-105 transition-all duration-300 ease-out">
+          <button
+            onClick={handleAddToCart}
+            className="flex flex-row items-center shadow-lg gap-2 px-2 py-1 rounded-md ring-1 ring-gray-300 cursor-pointer hover:text-white hover:bg-black hover:scale-105 transition-all duration-300 ease-out"
+          >
             <ShoppingCart className="w-4 h-4" />
             Add to Cart
           </button>

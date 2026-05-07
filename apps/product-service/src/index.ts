@@ -4,6 +4,7 @@ import { clerkMiddleware } from "@clerk/express";
 import { shouldBeUser } from "./middleware/authMiddleware";
 import productRouter from "./routes/product.routes";
 import categoryRouter from "./routes/category.routes";
+import { consumer, producer } from "./utils/kafka";
 const app = express();
 app.use(clerkMiddleware());
 app.use(
@@ -29,6 +30,16 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     .status(err.status || 500)
     .json({ message: err.message || "Inter Server Error" });
 });
-app.listen(8000, () => {
-  console.log("Product service is running on port 8000");
-});
+const start = async () => {
+  try {
+    Promise.all([await producer.connect(), await consumer.connect()]);
+    app.listen(8000, () => {
+      console.log("Product service is running on port 8000");
+    });
+  } catch (err) {
+    console.log(err);
+    process.exit(1);
+  }
+};
+
+start();

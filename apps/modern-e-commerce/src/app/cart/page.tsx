@@ -3,9 +3,10 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PaymentForm from "@/components/PaymentForm";
 import ShippingForm from "@/components/ShippingForm";
+import StripePaymentForm from "@/components/StripePaymentForm";
 import useCartStore from "@/stores/cartStore";
-import { CartItemsType, ShippingFormInputs } from "@/types";
-import { ArrowLeft, ArrowRight, Trash2 } from "lucide-react";
+import { CartItemsType, ShippingFormInputs } from "@repo/types";
+import { ArrowRight, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -21,61 +22,6 @@ const steps = [
   {
     id: 3,
     title: "Payment Method",
-  },
-];
-export const cartItems: CartItemsType = [
-  {
-    id: 1,
-    name: "Adidas CoreFit T-Shirt",
-    shortDescription:
-      "Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.",
-    description:
-      "Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit. Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit. Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.",
-    price: 39.9,
-    sizes: ["s", "m", "l", "xl", "xxl"],
-    colors: ["gray", "purple", "green"],
-    images: {
-      gray: "/products/1g.png",
-      purple: "/products/1p.png",
-      green: "/products/1gr.png",
-    },
-    quantity: 1,
-    selectedSize: "m",
-    selectedColor: "gray",
-  },
-  {
-    id: 2,
-    name: "Puma Ultra Warm Zip",
-    shortDescription:
-      "Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.",
-    description:
-      "Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit. Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit. Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.",
-    price: 59.9,
-    sizes: ["s", "m", "l", "xl"],
-    colors: ["gray", "green"],
-    images: { gray: "/products/2g.png", green: "/products/2gr.png" },
-    quantity: 1,
-    selectedSize: "l",
-    selectedColor: "gray",
-  },
-  {
-    id: 3,
-    name: "Nike Air Essentials Pullover",
-    shortDescription:
-      "Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.",
-    description:
-      "Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit. Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit. Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.",
-    price: 69.9,
-    sizes: ["s", "m", "l"],
-    colors: ["green", "blue", "black"],
-    images: {
-      green: "/products/3gr.png",
-      blue: "/products/3b.png",
-      black: "/products/3bl.png",
-    },
-    quantity: 1,
-    selectedSize: "l",
-    selectedColor: "black",
   },
 ];
 const CartPageContent = () => {
@@ -122,8 +68,8 @@ const CartPageContent = () => {
           {/* STEPS */}
           <div className="w-full lg:w-7/12 shadow-lg border border-gray-100 p-8 rounded-lg flex flex-col gap-8">
             {activeStep === 1 ? (
-              cartItems.map((item) => (
-                // SINGLE CART ITEM
+              cart.map((item) => (
+                // sSINGLE CART ITEM
                 <div
                   className="flex items-center justify-between"
                   key={item.id + item.selectedSize + item.selectedColor}
@@ -133,7 +79,11 @@ const CartPageContent = () => {
                     {/* IMAGE */}
                     <div className="relative w-32 h-32 bg-gray-50 rounded-lg overflow-hidden">
                       <Image
-                        src={item.images[item.selectedColor] || "/logo.png"}
+                        src={
+                          (item.images as Record<string, string>)?.[
+                            item.selectedColor
+                          ] || "/logo.png"
+                        }
                         alt={item.name}
                         fill
                         className="object-contain"
@@ -168,7 +118,8 @@ const CartPageContent = () => {
             ) : activeStep === 2 ? (
               <ShippingForm setShippingForm={setShippingForm} />
             ) : activeStep === 3 && shippingForm ? (
-              <PaymentForm />
+              // <PaymentForm />
+              <StripePaymentForm shippingForm={shippingForm} />
             ) : (
               <p className="text-sm text-gray-500">
                 Please fill in the shipping form to continue
@@ -183,8 +134,8 @@ const CartPageContent = () => {
                 <p className="text-sm font-boldtext-gray-500">Subtotal</p>
                 <p className=" text-gray-500 ">
                   $
-                  {cartItems
-                    .reduce((acc, item) => acc + item.price + item.quantity, 0)
+                  {cart
+                    .reduce((acc, item) => acc + item.price * item.quantity, 0)
                     .toFixed(2)}
                 </p>
               </div>
@@ -199,7 +150,12 @@ const CartPageContent = () => {
               <hr className="border-gray-200" />
               <div className="flex justify-between">
                 <p className="text-gray-800 font-semibold">Total</p>
-                <p className=" text-gray-500">$10</p>
+                <p className=" text-gray-500">
+                  $
+                  {cart
+                    .reduce((acc, item) => acc + item.price * item.quantity, 0)
+                    .toFixed(2)}
+                </p>
               </div>
             </div>
 

@@ -1,6 +1,6 @@
-import { PaymentFormInputs, paymentFormSchema } from "@/types";
+import { PaymentFormInputs, paymentFormSchema } from "@repo/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, ShoppingCart } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Image from "next/image";

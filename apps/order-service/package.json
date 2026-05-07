@@ -23,6 +23,7 @@
     "@clerk/fastify": "^3.1.9",
     "fastify": "5.5.0",
     "@repo/order-db": "workspace:*",
-    "@atproto/repo": "0.9.0"
+    "@atproto/repo": "0.9.0",
+    "@repo/kafka": "workspace:*"
   }
 }
