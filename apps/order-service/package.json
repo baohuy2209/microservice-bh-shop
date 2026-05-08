@@ -7,23 +7,24 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "check-types": "tsc --noEmit",
-    "dev": "pnpm dlx tsx --env-file=.env --watch src/index.ts"
+    "dev": "set \"NODE_OPTIONS=--max-old-space-size=8192\" && pnpm dlx tsx --env-file=.env --watch src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@repo/types": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^25.3.1",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.2",
-    "@repo/types": "workspace:*"
+    "typescript": "^6.0.2"
   },
   "dependencies": {
-    "@clerk/fastify": "^3.1.9",
-    "fastify": "5.5.0",
-    "@repo/order-db": "workspace:*",
     "@atproto/repo": "0.9.0",
-    "@repo/kafka": "workspace:*"
+    "@clerk/fastify": "^3.1.9",
+    "@repo/kafka": "workspace:*",
+    "@repo/order-db": "workspace:*",
+    "date-fns": "^4.1.0",
+    "fastify": "5.5.0"
   }
 }

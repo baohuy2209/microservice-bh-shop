@@ -3,8 +3,11 @@ import cors from "cors";
 import { clerkMiddleware } from "@clerk/express";
 import { shouldBeAdmin } from "./middleware/authMiddleware";
 import userRoute from "./routes/user.route";
+import morgan from "morgan";
+import { producer } from "./utils/kafka";
 const app = express();
 app.use(clerkMiddleware());
+app.use(morgan("combined"));
 app.use(
   cors({
     origin: ["http://localhost:3000"], // Allow requests from the frontend
@@ -26,6 +29,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 });
 const start = async () => {
   try {
+    await producer.connect();
     app.listen(8004, () => {
       console.log("Authentication service is running on port 8004");
     });
