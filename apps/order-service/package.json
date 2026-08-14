@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run",
     "check-types": "tsc --noEmit",
     "dev": "set \"NODE_OPTIONS=--max-old-space-size=8192\" && pnpm dlx tsx --env-file=.env --watch src/index.ts"
   },
@@ -17,7 +17,8 @@
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^25.3.1",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.2",
+    "vitest": "^3.0.7"
   },
   "dependencies": {
     "@atproto/repo": "0.9.0",

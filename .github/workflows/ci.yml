@@ -1,0 +1,72 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+    branches: [main, staging]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-monorepo:
+    name: Lint, Type-Check & Automated Tests
+    runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10.23.0
+
+      - name: Setup Node.js 20 Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install Monorepo Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma Database Clients
+        run: pnpm db:generate
+
+      - name: Run ESLint (Affected Packages)
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm exec turbo run lint --filter=...[origin/${{ github.base_ref }}]
+          else
+            pnpm exec turbo run lint
+          fi
+
+      - name: Run TypeScript Type-Check (Affected Packages)
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm exec turbo run check-types --filter=...[origin/${{ github.base_ref }}]
+          else
+            pnpm exec turbo run check-types
+          fi
+
+      - name: Execute Automated Test Suites (Affected Packages)
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm exec turbo run test --filter=...[origin/${{ github.base_ref }}]
+          else
+            pnpm exec turbo run test
+          fi
+        env:
+          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/test_product_db"
+          MONGO_URL: "mongodb://localhost:27017/test_order_db"
+          CLERK_SECRET_KEY: "mock_clerk_secret_key"
+          STRIPE_SECRET_KEY: "mock_stripe_secret_key"
+          STRIPE_WEBHOOK_SECRET: "mock_stripe_whsec"

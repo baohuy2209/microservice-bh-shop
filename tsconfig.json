@@ -1,0 +1,8 @@
+{
+  "extends": "./packages/typescript-config/base.json",
+  "include": [
+    "vitest.workspace.ts",
+    "vitest.config.ts",
+    "turbo.json"
+  ]
+}

@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "set \"NODE_OPTIONS=--max-old-space-size=8192\" && next dev --turbopack --port 3000",
     "build": "next build",
+    "test": "vitest run",
     "start": "next start",
     "lint": "next lint",
     "check-type": "tsc --noEmit"

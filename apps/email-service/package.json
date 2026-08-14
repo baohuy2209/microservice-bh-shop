@@ -5,7 +5,8 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run",
+    "check-types": "tsc --noEmit",
     "dev": "pnpm dlx tsx --env-file=.env --watch src/index.ts"
   },
   "dependencies": {
@@ -16,7 +17,9 @@
     "@repo/types": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^25.6.2",
-    "@types/nodemailer": "^8.0.0"
+    "@types/nodemailer": "^8.0.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.0.7"
   },
   "keywords": [],
   "author": "",

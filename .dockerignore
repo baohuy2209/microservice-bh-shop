@@ -1,0 +1,33 @@
+# Dependency and build directories
+node_modules
+.pnpm-store
+dist
+build
+.next
+out
+coverage
+
+# Version control and IDEs
+.git
+.gitignore
+.vscode
+.idea
+.turbo
+
+# Environment and sensitive files
+.env
+.env.*
+!.env.example
+*.pem
+
+# Logs and debug files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
+.dockerignore
