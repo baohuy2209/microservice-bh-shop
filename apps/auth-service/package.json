@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@clerk/express": "^2.1.54",
+    "@clerk/express": "^2.1.56",
     "@repo/kafka": "workspace:*",
     "cors": "^2.8.6",
     "express": "^5.2.1",
